@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script>
+        window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery-3.1.0.min.js"%3E%3C/script%3E'))
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/17.2.7/css/dx.spa.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/17.2.7/css/dx.common.css" />
+    <link rel="dx-theme" data-theme="generic.light" href="https://cdn3.devexpress.com/jslib/17.2.7/css/dx.light.css" />
+    <script src="https://cdn3.devexpress.com/jslib/17.2.7/js/dx.all.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+    <!-- CSV file -->
+    <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+    <script src="https://d3js.org/d3-request.v1.min.js"></script>
+
+
+    <!-- Data -->
+    <script src="language.js"></script>
+    <script src="Graph.js"></script>
+    <script src="GraphData.js"></script>
+    <script src="Dropdown.js"></script>
+    <script>
+        d3.csv("/TDRI.csv", function (data) {
+            console.log(data);
+        })
+    </script>
+    <script>
+        $.ajax({
+            type: "GET",
+            url: "TDRI.csv",
+            success: console.log(data)
+        });
+    </script>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+</head>
+
+
+<body class="bg-light">
+    <div class="container ">
+
+        <div class="display-4 m-3" id="title">Job</div>
+
+    </div>
+
+
+
+    <div class="container">
+
+        <div class="row justify-content-between">
+
+            <div class="col-md-auto ">
+
+                <div class="btn-group m-2">
+                    <button class="btn btn-primary dropdown-toggle  dropdownMenu dropdown-btn" type="button" id="dropdownMenuButton1" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                                          Dropdown button
+                                        </button>
+                    <div class="dropdown-menu " id="dropdownMenu1" aria-labelledby="-dropdownMenuButton">
+
+                    </div>
+
+                </div>
+                <div class="btn-group m-2">
+                    <button class="btn btn-primary dropdown-toggle dropdownMenu dropdown-btn" type="button" id="dropdownMenuButton2" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                                      Dropdown buttoasdffsn
+                                    </button>
+                    <div class="dropdown-menu " id="dropdownMenu2" aria-labelledby="-dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+
+                <button type="button m-2" class="btn btn-primary box-shadow" id="applyBtn">Primary</button>
+
+            </div>
+
+            <div class="col col-lg-2">
+                <a class="langBtn m-2" id="th">
+                                        <img class="imgBtn"src="Resources/images/th.png" />
+                                       </a>
+                <a class="langBtn" id="en">
+                                        <img class="imgBtn" src="Resources/images/en.png" />
+                                       </a>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center my-4">
+        <div class="col p-0">
+            <div class="chart_left chart" id="chart_left"></div>
+        </div>
+        <div class="col p-0">
+            <div class="chart_right chart" id="pie"></div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center my-4">
+        <div class="col p-0">
+            <div class="chart_left chart" id="chart_left2"></div>
+        </div>
+        <div class="col p-0">
+            <div class="chart_right chart" id="chart_right2"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>
