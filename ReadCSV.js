@@ -5,6 +5,7 @@ $(document).ready(function () {
     $("#applyBtn").click(function () {
         var startDate = $("#startDate").val().toString()
         var endDate = $("#endDate").val().toString()
+        console.log(startDate)
         if(moment(startDate).isSameOrBefore(endDate)){
             readFile()            
         }
@@ -48,7 +49,7 @@ function processOccupation(csv) {
     for(var i = 1; i < lines.length; i++){
         job[lines[i][0]]=lines[i][1]
     }
-    
+    console.log(job)
 }
 function processData(csv) {
     var allTextLines = csv.split(/\r\n|\n/);
@@ -65,24 +66,21 @@ function drawOutput(lines) {
     //Clear previous data
     for (i in lines[0]){
         column[lines[0][i]] = i
-    }
-    console.log(lines)
-    console.log(column)
-    
+    }    
     var startDate = $("#startDate").val().toString()
     var endDate = $("#endDate").val().toString()
     var data = []
-    console.log(moment('2017-10').isBetween('2015-10', '2017-10', 'month', '[]')); //true)
     for (var i = 1; i < lines.length; i++){
         var dataDate = JSON.stringify(lines[i][column['date_posted']]).toString().substring(1,8)
         if(moment(dataDate).isBetween(startDate, endDate, 'month', '[]')){
             data.push(lines[i])
         }
     }
+    console.log(data)
     
     renderGraph(data, 'ONET_SOC', "no_position", "date_posted", "chart_left")
-    renderGraph(data, 'Company', "No. of Vacancy", "date_posted", "chart_left2")
-    renderGraph(data, 'Actor', "No. of Vacancy", "date_posted", "chart_right")
+    // renderGraph(data, 'Company', "No. of Vacancy", "date_posted", "chart_left2")
+    // renderGraph(data, 'Actor', "No. of Vacancy", "date_posted", "chart_right")
     // renderPie(lines, 1, "pie")
     //renderPie(lines, COMPANY, "pie2")
     //renderPie(lines, LOCATION, "pie3")
@@ -197,15 +195,17 @@ function renderGraph(lines, x, y, z, graphID) {
     var dict = {}
     var array_year = []
     var serie2 = []
+    console.log(job)
     for (var i = 1; i < lines.length; i++) {
         var y_axis = parseInt(lines[i][column[y]])
         var z_axis = lines[i][column[z]].toString().substring(0,4)
         if(x== 'ONET_SOC'){
+            console.log([column[x]])
             var x_axis = job[lines[i][column[x]]]                        
         }else{
             var x_axis = lines[i][column[x]]            
         }
-        console.log(z_axis.toString().substring(0,4))
+        console.log(x_axis,y_axis,z_axis)
         if (x_axis in data && z_axis in data[x_axis]) {
             data[x_axis][z_axis] += y_axis;
         }
@@ -224,6 +224,7 @@ function renderGraph(lines, x, y, z, graphID) {
             array_year.push(z_axis)
         }
     }
+    console.log(data)
     array_year.sort()
     dict = {}
     for (var i = 0; i < array_year.length; i++) {
