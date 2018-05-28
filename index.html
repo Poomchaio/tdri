@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/17.2.7/css/dx.spa.css" />
@@ -17,9 +17,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>    
     <!-- CSV file -->
     <script src="https://d3js.org/d3-collection.v1.min.js"></script>
     <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
@@ -34,40 +33,40 @@
     <script src="Dropdown.js"></script>
     <script src="ReadCSV.js"></script>
     <script src="Time.js"></script>
-    
-    <script >
-    var ExcelToJSON = function() {
 
-  this.parseExcel = function(file) {
-    var reader = new FileReader();
+    <script>
+        var ExcelToJSON = function () {
 
-    reader.onload = function(e) {
-      var data = e.target.result();
-      var workbook = XLSX.read(data, {
-        type: 'binary'
-      });
+            this.parseExcel = function (file) {
+                var reader = new FileReader();
 
-      workbook.SheetNames.forEach(function(sheetName) {
-        // Here is your object
-        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-        var json_object = JSON.stringify(XL_row_object);
-        console.log(json_object);
+                reader.onload = function (e) {
+                    var data = e.target.result();
+                    var workbook = XLSX.read(data, {
+                        type: 'binary'
+                    });
 
-      })
+                    workbook.SheetNames.forEach(function (sheetName) {
+                        // Here is your object
+                        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                        var json_object = JSON.stringify(XL_row_object);
+                        console.log(json_object);
 
-    };
+                    })
 
-    reader.onerror = function(ex) {
-      console.log(ex);
-    };
+                };
 
-    reader.readAsBinaryString(file);
-  };
-};
+                reader.onerror = function (ex) {
+                    console.log(ex);
+                };
+
+                reader.readAsBinaryString(file);
+            };
+        };
     </script>
 
     <!-- Date -->
-    <script src="js/moment.min.js"></script> 
+    <script src="js/moment.min.js"></script>
     <script src="js/combodate.js"></script>
 
 
@@ -76,18 +75,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <!-- <link rel="stylesheet" type="text/css" href="styles.css" /> -->
-    
-        
+
+
 </head>
 
 
 <body class="bg-light">
-    
 
     <div class="container ">
 
         <div class="display-4 m-3" id="title">Job</div>
-       
+
     </div>
 
 
@@ -99,14 +97,14 @@
             <div class="col-md-auto">
                 <div id="div-date">
                     <Text> startDate</Text>
-                    <input id="startDate"type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2014-02">
-                </div> 
+                    <input id="startDate" type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2014-02">
+                </div>
                 <div id="div-date">
-                        <Text> endDate</Text>
-                        
-                    <input id="endDate"type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2017-05">
-                </div> 
-                          
+                    <Text> endDate</Text>
+
+                    <input id="endDate" type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2017-05">
+                </div>
+
 
                 <button type="button m-2" class="btn btn-primary box-shadow" id="applyBtn">Primary</button>
 

@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/Poomchaio/tdri#readme",
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.16.3",
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "node-xlsx": "^0.12.0",
+    "nodemon": "^1.17.5"
   }
 }
