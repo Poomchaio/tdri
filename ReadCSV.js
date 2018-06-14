@@ -1,111 +1,96 @@
-var column = [];
 var job = [];
+var skill = [];
+var titleTable = { ONET_SOC: 'Occupation', company: 'Company', job_title: 'Job' };
 $(document).ready(function() {
-  $("#applyBtn").click(function() {
-    var startDate = $("#startDate").val().toString();
-    var endDate = $("#endDate").val().toString();
+  $('#applyBtn').click(function() {
+    var startDate = $('#startDate')
+      .val()
+      .toString();
+    var endDate = $('#endDate')
+      .val()
+      .toString();
     if (moment(startDate).isSameOrBefore(endDate)) {
       readFile();
     } else {
-      alert("Invalid Output");
+      alert('Invalid Output');
     }
   });
 });
 
 function readFile() {
-  // var promise1 = new Promise(function(resolve, reject) {
-  //     var xhttp = new XMLHttpRequest();
-  //     xhttp.onreadystatechange = function () {
-  //         if (this.readyState == 4 && this.status == 200) {
-  //             processOccupation(this.response);
-  //         }
-  //     };
-  //     xhttp.open("GET", "Occupation Data.xlsx", true);
-  //     xhttp.send();
-  //     resolve('Success!');
-
-  //   });
-
-  //   promise1.then(function(value) {
-  //     var xhttp = new XMLHttpRequest();
-
-  //     xhttp.onreadystatechange = function () {
-  //         if (this.readyState == 4 && this.status == 200) {
-  //             processData(this.response);
-  //         }
-  //     };
-  //     xhttp.open("GET", "sample_table_20180525.csv", true);
-  //     xhttp.send();
-  //   });
-  fetch("http://localhost:3000/", {
-    method: "GET", // or 'PUT'
+  fetch('http://localhost:3000/', {
+    method: 'GET', // or 'PUT'
     headers: {
-      "Access-Control-Allow-Origin": "http://localhost:3000",
-      "Access-Control-Allow-Credentials": "true"
-    }
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Allow-Credentials': 'true',
+    },
   }) // Call the fetch function passing the url of the API as a parameter
     .then(function(res) {
       return res.json();
     })
     .then(function(data) {
-      var xhttp = new XMLHttpRequest();
-
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          processData(this.response);
-        }
-      };
-      xhttp.open("GET", "sample_table_20180525.csv", true);
-      xhttp.send();
       for (i in data) {
         for (j in data[i]) {
-          job[data[i]["O*NET-SOC Code"]] = data[i]["Title"];
+          job[data[i]['O*NET-SOC Code']] = data[i]['Title'];
         }
       }
-      console.log(job);
+      fetch('http://localhost:3000/getdata', {
+        method: 'GET', // or 'PUT'
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:3000',
+          'Access-Control-Allow-Credentials': 'true',
+        },
+      }) // Call the fetch function passing the url of the API as a parameter
+        .then(function(res) {
+          return res.json();
+        })
+        .then(data => {
+          console.log(data);
+          processData(data);
+        });
     })
     .catch(function(err) {
       console.log(err);
     });
 }
 
-function processData(csv) {
-  var allTextLines = csv.split(/\r\n|\n/);
-  var lines = [];
-  while (allTextLines.length) {
-    lines.push(allTextLines.shift().split(","));
-  }
-  drawOutput(lines);
-}
-
-function drawOutput(lines) {
-  //Clear previous data
-  for (i in lines[0]) {
-    column[lines[0][i]] = i;
-  }
-  var startDate = $("#startDate")
+function processData(excel) {
+  var startDate = $('#startDate')
     .val()
     .toString();
-  var endDate = $("#endDate")
+  var endDate = $('#endDate')
     .val()
     .toString();
   var data = [];
-  console.log(lines)
-  for (var i = 1; i < lines.length ; i++) {
-    var dataDate = JSON.stringify(lines[i][column["date_posted"]]).toString().substring(1, 8);
-    console.log(dataDate, startDate , endDate)
-    if (moment(dataDate).isBetween(startDate, endDate, "month", "[]")) {
-      data.push(lines[i]);
+  for (var i = 0; i < excel.length; i++) {
+    var dataDate = JSON.stringify(excel[i]['date_posted'])
+      .toString()
+      .substring(1, 8);
+    if (moment(dataDate).isBetween(startDate, endDate, 'month', '[]')) {
+      data.push(excel[i]);
     }
   }
-  console.log(data);
-
-  renderGraph(data, "ONET_SOC", "no_position", "date_posted", "chart_left");
-    renderGraph(data, "Company", "No. of Vacancy", "date_posted", "chart_left2");
-    renderGraph(data, "Actor", "No. of Vacancy", "date_posted", "chart_right");
-  renderPie(lines, 1, "pie")
-  renderPie(lines, COMPANY, "pie2")
-  renderPie(lines, LOCATION, "pie3")
+  console.log('fetch');
+  fetch('http://localhost:3000/getdata2', {
+    method: 'GET', // or 'PUT'
+    headers: {
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Allow-Credentials': 'true',
+    },
+  }) // Call the fetch function passing the url of the API as a parameter
+    .then(function(res) {
+      console.log('pass');
+      return res.json();
+    })
+    .then(data => {
+      console.log(data);
+    });
+  renderGraph(data, 'ONET_SOC', 'no_position', 'date_posted', 'chart_left');
+  renderGraph(data, 'company', 'no_position', 'date_posted', 'chart_left2');
+  renderGraph(data, 'job_title', 'no_position', 'date_posted', 'chart_right');
+  // renderPie(data, 'company', 'pie');
+  // renderPie(data, 'company', 'pie2');
+  // renderPie(data, 'location', 'pie3');
 }
 
 function graphOne(lines) {
@@ -123,7 +108,7 @@ function graphOne(lines) {
     } else if (pos in data && !(year in data[pos])) {
       data[pos][year] = num;
     } else {
-      dict["state"] = pos;
+      dict['state'] = pos;
       //dict['vacancyNo' + year] = num
       dict[year] = num;
       data[pos] = dict;
@@ -140,15 +125,15 @@ function graphOne(lines) {
     year = array_year[i];
     if (i != array_year.length - 1) {
       // dict['valueField'] = "vacancyNo" + year
-      dict["valueField"] = year;
-      dict["name"] = year;
-      dict["color"] = "#646464";
+      dict['valueField'] = year;
+      dict['name'] = year;
+      dict['color'] = '#646464';
       serie2.push(dict);
     } else {
       // dict['valueField'] = "vacancyNo" + year
-      dict["valueField"] = year;
-      dict["name"] = year;
-      dict["color"] = "#ef7e50";
+      dict['valueField'] = year;
+      dict['name'] = year;
+      dict['color'] = '#ef7e50';
       serie2.push(dict);
     }
     dict = {};
@@ -165,47 +150,47 @@ function graphOne(lines) {
     }
   }
   dataSource = array;
-  $("#chart_left").dxChart({
-    palette: "soft",
+  $('#chart_left').dxChart({
+    palette: 'soft',
     dataSource: dataSource,
     barWidth: 0.5,
     commonSeriesSettings: {
-      argumentField: "state",
-      type: "bar"
+      argumentField: 'state',
+      type: 'bar',
     },
     series: serie2,
     legend: {
-      verticalAlignment: "bottom",
-      horizontalAlignment: "center"
+      verticalAlignment: 'bottom',
+      horizontalAlignment: 'center',
     },
     customizeLabel: function() {
-      if (this.seriesName == "2017") {
+      if (this.seriesName == '2017') {
         return {
           visible: true,
-          backgroundColor: "#ff7c7c",
+          backgroundColor: '#ff7c7c',
           customizeText: function() {
             return this.valueText;
-          }
+          },
         };
       } else if (this.value == 0) {
         return {
           visible: true,
-          backgroundColor: "#ff7c7c",
+          backgroundColor: '#ff7c7c',
           customizeText: function() {
             return 0;
-          }
+          },
         };
       }
     },
     export: {
-      enabled: true
+      enabled: true,
     },
     title: {
-      text: "Oil Production",
-      subtitle: {
-        text: "(in millions tonnes)"
-      }
-    }
+      text: 'Job',
+      // subtitle: {
+      //   text: '(in millions tonnes)',
+      // },
+    },
   });
 }
 
@@ -215,25 +200,20 @@ function renderGraph(lines, x, y, z, graphID) {
   var dict = {};
   var array_year = [];
   var serie2 = [];
-  console.log(job);
   for (var i = 1; i < lines.length; i++) {
-    var y_axis = parseInt(lines[i][column[y]]);
-    var z_axis = lines[i][column[z]].toString().substring(0, 4);
-    if (x == "ONET_SOC") {
-      console.log(lines[i][column[x]]);
-      console.log(job["17-2072.0"]);
-      var x_axis = job[lines[i][column[x]]];
+    var y_axis = parseInt(lines[i][y]);
+    var z_axis = lines[i][z].toString().substring(0, 4);
+    if (x == 'ONET_SOC') {
+      var x_axis = job[lines[i][x]];
     } else {
-      var x_axis = lines[i][column[x]];
+      var x_axis = lines[i][x];
     }
-    console.log(x_axis, y_axis, z_axis);
     if (x_axis in data && z_axis in data[x_axis]) {
       data[x_axis][z_axis] += y_axis;
     } else if (x_axis in data && !(z_axis in data[x_axis])) {
       data[x_axis][z_axis] = y_axis;
     } else {
-      dict["state"] = x_axis;
-      //dict['vacancyNo' + year] = num
+      dict['state'] = x_axis;
       dict[z_axis] = y_axis;
       data[x_axis] = dict;
       dict = {};
@@ -243,22 +223,21 @@ function renderGraph(lines, x, y, z, graphID) {
       array_year.push(z_axis);
     }
   }
-  console.log(data);
   array_year.sort();
   dict = {};
   for (var i = 0; i < array_year.length; i++) {
     z_axis = array_year[i];
     if (i != array_year.length - 1) {
       // dict['valueField'] = "vacancyNo" + year
-      dict["valueField"] = z_axis;
-      dict["name"] = z_axis;
-      dict["color"] = "#646464";
+      dict['valueField'] = z_axis;
+      dict['name'] = z_axis;
+      dict['color'] = '#646464';
       serie2.push(dict);
     } else {
       // dict['valueField'] = "vacancyNo" + year
-      dict["valueField"] = z_axis;
-      dict["name"] = z_axis;
-      dict["color"] = "#ef7e50";
+      dict['valueField'] = z_axis;
+      dict['name'] = z_axis;
+      dict['color'] = '#ef7e50';
       serie2.push(dict);
     }
     dict = {};
@@ -275,48 +254,55 @@ function renderGraph(lines, x, y, z, graphID) {
       }
     }
   }
+  const title = titleTable[x];
   dataSource = array;
-  $("#" + graphID).dxChart({
-    palette: "soft",
+  $('#' + graphID).dxChart({
+    palette: 'soft',
     dataSource: dataSource,
     barWidth: 0.5,
     commonSeriesSettings: {
-      argumentField: "state",
-      type: "bar"
+      argumentField: 'state',
+      type: 'bar',
     },
     series: serie2,
     legend: {
-      verticalAlignment: "bottom",
-      horizontalAlignment: "center"
+      verticalAlignment: 'bottom',
+      horizontalAlignment: 'center',
     },
     customizeLabel: function() {
-      if (this.seriesName == "2017") {
+      if (this.seriesName == '2017') {
         return {
           visible: true,
-          backgroundColor: "#ff7c7c",
+          backgroundColor: '#ff7c7c',
           customizeText: function() {
             return this.valueText;
-          }
+          },
         };
       } else if (this.value == 0) {
         return {
           visible: true,
-          backgroundColor: "#ff7c7c",
+          backgroundColor: '#ff7c7c',
           customizeText: function() {
             return 0;
-          }
+          },
         };
       }
     },
     export: {
-      enabled: true
+      enabled: true,
     },
     title: {
-      text: "Oil Production",
-      subtitle: {
-        text: "(in millions tonnes)"
-      }
-    }
+      text: title,
+    },
+    tooltip: {
+      enabled: true,
+      customizeTooltip: function(arg) {
+        console.log(arg);
+        return {
+          text: arg.argumentText + ' - ' + arg.valueText,
+        };
+      },
+    },
   });
 }
 
@@ -326,8 +312,6 @@ function renderPie(lines, type, graphID) {
   for (var i = 1; i < lines.length; i++) {
     var title = lines[i][type];
     var count = parseInt(lines[i][2]);
-    console.log(title);
-    console.log(count);
     if (title in data) {
       data[title] += count;
     } else {
@@ -338,30 +322,30 @@ function renderPie(lines, type, graphID) {
   var arr2 = arr1.map(function(k) {
     return { title: k, count: data[k] };
   });
-
+  console.log(arr2);
   dataSource1 = arr2;
-  $("#" + graphID).dxPieChart({
+  $('#' + graphID).dxPieChart({
     size: {
-      width: 500
+      width: 500,
     },
-    palette: "bright",
+    palette: 'bright',
     dataSource: dataSource1,
     series: [
       {
-        argumentField: "title",
-        valueField: "count",
+        argumentField: 'title',
+        valueField: 'count',
         label: {
           visible: true,
           connector: {
             visible: true,
-            width: 1
-          }
-        }
-      }
+            width: 1,
+          },
+        },
+      },
     ],
-    title: "Area of Countries",
+    title: 'Area of Countries',
     export: {
-      enabled: true
+      enabled: true,
     },
     onPointClick: function(e) {
       var point = e.target;
@@ -372,7 +356,7 @@ function renderPie(lines, type, graphID) {
       var arg = e.target;
 
       toggleVisibility(this.getAllSeries()[0].getPointsByArg(arg)[0]);
-    }
+    },
   });
   function toggleVisibility(item) {
     if (item.isVisible()) {

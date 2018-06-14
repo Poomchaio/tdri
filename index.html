@@ -19,14 +19,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
 
-    <!-- CSV file -->
-    <script src="https://d3js.org/d3-collection.v1.min.js"></script>
-    <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
-    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
-    <script src="https://d3js.org/d3-request.v1.min.js"></script>
-
 
     <!-- Data -->
+    <script src="styles.css"></script>
     <script src="language.js"></script>
     <script src="Graph.js"></script>
     <script src="GraphData.js"></script>
@@ -84,7 +79,7 @@
 
     <div class="container ">
 
-        <div class="display-4 m-3" id="title">Job</div>
+        <div class="display-4 m-4" id="title">Job</div>
 
     </div>
 
@@ -94,19 +89,33 @@
 
         <div class="row justify-content-between">
 
-            <div class="col-md-auto">
-                <div id="div-date">
-                    <Text> startDate</Text>
-                    <input id="startDate" type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2014-02">
+            <div class="col-md-12">
+                <div id="div-date" class="row my-3 col-md-12">
+                    <div class="col-md-2">
+                        <Text> Start Date</Text>
+                    </div>
+                    <div class="col-md-4">
+                        <input id="startDate" type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2014-02">
+
+                    </div>
                 </div>
-                <div id="div-date">
-                    <Text> endDate</Text>
+                <div id="div-date" class="row my-2 col-md-12">
+                    <div class="col-md-2">
+                        <Text> End Date</Text>
+                    </div>
+                    <div class="col-md-4">
+                        <input id="endDate" type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2017-05">
 
-                    <input id="endDate" type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2017-05">
+                    </div>
                 </div>
 
 
-                <button type="button m-2" class="btn btn-primary box-shadow" id="applyBtn">Primary</button>
+
+                <button type="button mt-2" class="btn btn-primary box-shadow m-4" id="applyBtn">Apply</button>
+                <a href="./sample_table_20180610_wee.xlsx">
+                    <button type="button mt-2" class="btn btn-primary box-shadow" id="exportBtn">Export</button>
+                </a>
+
 
             </div>
 
@@ -120,31 +129,33 @@
             </div> -->
         </div>
     </div>
-    <div class="row justify-content-center my-4">
-        <div class="col p-0">
-            <div class="chart_left chart" id="chart_left"></div>
+
+
+    <div class="row justify-content-center ">
+        <div class="col p-0 m-4">
+            <div class="" id="chart_left"></div>
         </div>
-        <div class="col p-0">
-            <div class="chart_right chart" id="chart_right"></div>
+        <div class="col p-0 m-4">
+            <div class="" id="chart_right"></div>
         </div>
     </div>
 
-    <div class="row justify-content-center my-4">
-        <div class="col p-0">
-            <div class="chart_left chart" id="chart_left2"></div>
+    <div class="row justify-content-center">
+        <div class="col p-0 m-4">
+            <div class="" id="chart_left2"></div>
         </div>
-        <div class="col p-0">
-            <div class="chart_right chart" id="pie"></div>
+        <div class="col p-0 m-4">
+            <div class="" id="pie"></div>
 
         </div>
     </div>
 
-    <div class="row justify-content-center my-4">
-        <div class="col p-0">
-            <div class="chart_left chart" id="pie1"></div>
+    <div class="row justify-content-center">
+        <div class="col p-0 m-4">
+            <div class="" id="pie1"></div>
         </div>
-        <div class="col p-0">
-            <div class="chart_right chart" id="pie2"></div>
+        <div class="col p-0 m-4">
+            <div class="" id="pie2"></div>
 
         </div>
     </div>
