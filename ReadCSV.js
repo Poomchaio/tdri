@@ -108,7 +108,7 @@ function graphOne(lines) {
     } else if (pos in data && !(year in data[pos])) {
       data[pos][year] = num;
     } else {
-      dict['state'] = pos;
+      dict[x] = pos;
       //dict['vacancyNo' + year] = num
       dict[year] = num;
       data[pos] = dict;
@@ -213,7 +213,7 @@ function renderGraph(lines, x, y, z, graphID) {
     } else if (x_axis in data && !(z_axis in data[x_axis])) {
       data[x_axis][z_axis] = y_axis;
     } else {
-      dict['state'] = x_axis;
+      dict[x] = x_axis;
       dict[z_axis] = y_axis;
       data[x_axis] = dict;
       dict = {};
@@ -245,7 +245,6 @@ function renderGraph(lines, x, y, z, graphID) {
   for (i in data) {
     array.push(data[i]);
   }
-  console.log(array);
 
   for (i in array_year) {
     for (j in array) {
@@ -256,12 +255,14 @@ function renderGraph(lines, x, y, z, graphID) {
   }
   const title = titleTable[x];
   dataSource = array;
+  console.log(dataSource);
+  console.log(serie2);
   $('#' + graphID).dxChart({
     palette: 'soft',
     dataSource: dataSource,
     barWidth: 0.5,
     commonSeriesSettings: {
-      argumentField: 'state',
+      argumentField: x,
       type: 'bar',
     },
     series: serie2,
@@ -269,25 +270,25 @@ function renderGraph(lines, x, y, z, graphID) {
       verticalAlignment: 'bottom',
       horizontalAlignment: 'center',
     },
-    customizeLabel: function() {
-      if (this.seriesName == '2017') {
-        return {
-          visible: true,
-          backgroundColor: '#ff7c7c',
-          customizeText: function() {
-            return this.valueText;
-          },
-        };
-      } else if (this.value == 0) {
-        return {
-          visible: true,
-          backgroundColor: '#ff7c7c',
-          customizeText: function() {
-            return 0;
-          },
-        };
-      }
-    },
+    // customizeLabel: function() {
+    //   if (this.seriesName == '2017') {
+    //     return {
+    //       visible: true,
+    //       backgroundColor: '#ff7c7c',
+    //       customizeText: function() {
+    //         return this.valueText;
+    //       },
+    //     };
+    //   } else if (this.value == 0) {
+    //     return {
+    //       visible: true,
+    //       backgroundColor: '#ff7c7c',
+    //       customizeText: function() {
+    //         return 0;
+    //       },
+    //     };
+    //   }
+    // },
     export: {
       enabled: true,
     },
@@ -297,7 +298,6 @@ function renderGraph(lines, x, y, z, graphID) {
     tooltip: {
       enabled: true,
       customizeTooltip: function(arg) {
-        console.log(arg);
         return {
           text: arg.argumentText + ' - ' + arg.valueText,
         };
