@@ -1,6 +1,28 @@
 var job = [];
 var skill = [];
 var titleTable = { ONET_SOC: 'Occupation', company: 'Company', job_title: 'Job' };
+function average(data) {
+  var sum = data.reduce(function(sum, value) {
+    return sum + value;
+  }, 0);
+
+  var avg = sum / data.length;
+  return avg;
+}
+function standardDeviation(values) {
+  var avg = average(values);
+
+  var squareDiffs = values.map(function(value) {
+    var diff = value - avg;
+    var sqrDiff = diff * diff;
+    return sqrDiff;
+  });
+
+  var avgSquareDiff = average(squareDiffs);
+
+  var stdDev = Math.sqrt(avgSquareDiff);
+  return stdDev;
+}
 $(document).ready(function() {
   $('#applyBtn').click(function() {
     var startDate = $('#startDate')
@@ -83,115 +105,14 @@ function processData(excel) {
       return res.json();
     })
     .then(data => {
-      console.log(data);
+      // console.log(data);
     });
   renderGraph(data, 'ONET_SOC', 'no_position', 'date_posted', 'chart_left');
   renderGraph(data, 'company', 'no_position', 'date_posted', 'chart_left2');
   renderGraph(data, 'job_title', 'no_position', 'date_posted', 'chart_right');
-  // renderPie(data, 'company', 'pie');
+  renderPie(data, 'company', 'pie');
   // renderPie(data, 'company', 'pie2');
   // renderPie(data, 'location', 'pie3');
-}
-
-function graphOne(lines) {
-  var array = []; // datasource
-  var data = {};
-  var dict = {};
-  var array_year = [];
-  var serie2 = [];
-  for (var i = 1; i < lines.length; i++) {
-    var num = parseInt(lines[i][2]);
-    var year = lines[i][7];
-    var pos = lines[i][1];
-    if (pos in data && year in data[pos]) {
-      data[pos][year] += num;
-    } else if (pos in data && !(year in data[pos])) {
-      data[pos][year] = num;
-    } else {
-      dict[x] = pos;
-      //dict['vacancyNo' + year] = num
-      dict[year] = num;
-      data[pos] = dict;
-      dict = {};
-    }
-
-    if (array_year.indexOf(year) == -1) {
-      array_year.push(year);
-    }
-  }
-  array_year.sort();
-  dict = {};
-  for (var i = 0; i < array_year.length; i++) {
-    year = array_year[i];
-    if (i != array_year.length - 1) {
-      // dict['valueField'] = "vacancyNo" + year
-      dict['valueField'] = year;
-      dict['name'] = year;
-      dict['color'] = '#646464';
-      serie2.push(dict);
-    } else {
-      // dict['valueField'] = "vacancyNo" + year
-      dict['valueField'] = year;
-      dict['name'] = year;
-      dict['color'] = '#ef7e50';
-      serie2.push(dict);
-    }
-    dict = {};
-  }
-  for (i in data) {
-    array.push(data[i]);
-  }
-
-  for (i in array_year) {
-    for (j in array) {
-      if (!(array_year[i] in array[j])) {
-        array[j][array_year[i]] = 0;
-      }
-    }
-  }
-  dataSource = array;
-  $('#chart_left').dxChart({
-    palette: 'soft',
-    dataSource: dataSource,
-    barWidth: 0.5,
-    commonSeriesSettings: {
-      argumentField: 'state',
-      type: 'bar',
-    },
-    series: serie2,
-    legend: {
-      verticalAlignment: 'bottom',
-      horizontalAlignment: 'center',
-    },
-    customizeLabel: function() {
-      if (this.seriesName == '2017') {
-        return {
-          visible: true,
-          backgroundColor: '#ff7c7c',
-          customizeText: function() {
-            return this.valueText;
-          },
-        };
-      } else if (this.value == 0) {
-        return {
-          visible: true,
-          backgroundColor: '#ff7c7c',
-          customizeText: function() {
-            return 0;
-          },
-        };
-      }
-    },
-    export: {
-      enabled: true,
-    },
-    title: {
-      text: 'Job',
-      // subtitle: {
-      //   text: '(in millions tonnes)',
-      // },
-    },
-  });
 }
 
 function renderGraph(lines, x, y, z, graphID) {
@@ -199,96 +120,95 @@ function renderGraph(lines, x, y, z, graphID) {
   var data = {};
   var dict = {};
   var array_year = [];
-  var serie2 = [];
+  var values = [];
+
   for (var i = 1; i < lines.length; i++) {
-    var y_axis = parseInt(lines[i][y]);
-    var z_axis = lines[i][z].toString().substring(0, 4);
+    var y_value = parseInt(lines[i][y]);
     if (x == 'ONET_SOC') {
-      var x_axis = job[lines[i][x]];
+      var x_value = job[lines[i][x]];
     } else {
-      var x_axis = lines[i][x];
+      var x_value = lines[i][x];
     }
-    if (x_axis in data && z_axis in data[x_axis]) {
-      data[x_axis][z_axis] += y_axis;
-    } else if (x_axis in data && !(z_axis in data[x_axis])) {
-      data[x_axis][z_axis] = y_axis;
+    if (x_value in data) {
+      data[x_value]['value'] += y_value;
     } else {
-      dict[x] = x_axis;
-      dict[z_axis] = y_axis;
-      data[x_axis] = dict;
+      dict['value'] = y_value;
+      dict[x] = x_value;
+      data[x_value] = dict;
       dict = {};
     }
-
-    if (array_year.indexOf(z_axis) == -1) {
-      array_year.push(z_axis);
-    }
-  }
-  array_year.sort();
-  dict = {};
-  for (var i = 0; i < array_year.length; i++) {
-    z_axis = array_year[i];
-    if (i != array_year.length - 1) {
-      // dict['valueField'] = "vacancyNo" + year
-      dict['valueField'] = z_axis;
-      dict['name'] = z_axis;
-      dict['color'] = '#646464';
-      serie2.push(dict);
-    } else {
-      // dict['valueField'] = "vacancyNo" + year
-      dict['valueField'] = z_axis;
-      dict['name'] = z_axis;
-      dict['color'] = '#ef7e50';
-      serie2.push(dict);
-    }
-    dict = {};
   }
   for (i in data) {
     array.push(data[i]);
+    values.push(data[i].value);
   }
 
-  for (i in array_year) {
-    for (j in array) {
-      if (!(array_year[i] in array[j])) {
-        array[j][array_year[i]] = 0;
-      }
+  array.sort(function(a, b) {
+    return a.value - b.value;
+  });
+  var n = array.length / 4;
+  for (i in array) {
+    if (i < array.length / 4) {
+      array[i]['class'] = 1;
+    } else if (i < array.length / 2) {
+      array[i]['class'] = 2;
+    } else if (i < (array.length * 3) / 4) {
+      array[i]['class'] = 3;
+    } else {
+      array[i]['class'] = 4;
     }
   }
+  console.log(array);
+  var dataAvg = average(values);
+  var dataSD = standardDeviation(values);
+
   const title = titleTable[x];
   dataSource = array;
-  console.log(dataSource);
-  console.log(serie2);
   $('#' + graphID).dxChart({
     palette: 'soft',
     dataSource: dataSource,
     barWidth: 0.5,
-    commonSeriesSettings: {
+    series: {
       argumentField: x,
+      valueField: 'value',
+      name: 'a',
       type: 'bar',
+      color: '#fffff',
     },
-    series: serie2,
     legend: {
       verticalAlignment: 'bottom',
       horizontalAlignment: 'center',
     },
-    // customizeLabel: function() {
-    //   if (this.seriesName == '2017') {
-    //     return {
-    //       visible: true,
-    //       backgroundColor: '#ff7c7c',
-    //       customizeText: function() {
-    //         return this.valueText;
-    //       },
-    //     };
-    //   } else if (this.value == 0) {
-    //     return {
-    //       visible: true,
-    //       backgroundColor: '#ff7c7c',
-    //       customizeText: function() {
-    //         return 0;
-    //       },
-    //     };
-    //   }
-    // },
+    customizePoint: function(arg) {
+      console.log(arg);
+      if (arg.index < array.length / 4) {
+        // console.log(1);
+
+        return { color: '#a10020', hoverStyle: { color: '#a10020' } };
+      } else if (arg.index < array.length / 2) {
+        // console.log(2);
+
+        return { color: '#fc7335', hoverStyle: { color: '#fc7335' } };
+      } else if (arg.index < (array.length * 3) / 4) {
+        // console.log(3);
+
+        return { color: '#abb868', hoverStyle: { color: '#abb868' } };
+      } else {
+        // console.log(4);
+
+        return { color: '#6c804b', hoverStyle: { color: '#6c804b' } };
+      }
+
+      // if (this.class == 1) {
+      //   return { color: '#a10020', hoverStyle: { color: '#a10020' } };
+      // } else if (this.value < dataAvg) {
+      //   return { color: '#fc7335', hoverStyle: { color: '#fc7335' } };
+      // } else if (this.value < this.value < dataAvg + 0.675 * dataSD) {
+      //   return { color: '#abb868', hoverStyle: { color: '#abb868' } };
+      // } else {
+      //   return { color: '#6c804b', hoverStyle: { color: '#6c804b' } };
+      // }
+    },
     export: {
       enabled: true,
     },
