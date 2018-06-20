@@ -1,23 +1,23 @@
-let xlsx = require("node-xlsx").default;
-var fs = require("fs");
+let xlsx = require('node-xlsx').default;
+var fs = require('fs');
 
-const express = require("express");
-let cors = require("cors");
+const express = require('express');
+let cors = require('cors');
 
 const app = express();
-var bodyParser = require("body-parser");
+var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(
   bodyParser.urlencoded({
     // to support URL-encoded bodies
-    extended: true
+    extended: true,
   })
 );
 app.use(cors());
 
-app.get("/", (req, res) => {
-  if (typeof require !== "undefined") XLSX = require("xlsx");
-  let workbook = XLSX.readFile("Occupation Data.xlsx");
+app.get('/', (req, res) => {
+  if (typeof require !== 'undefined') XLSX = require('xlsx');
+  let workbook = XLSX.readFile('Occupation Data.xlsx');
   let sheet_name_list = workbook.SheetNames;
 
   sheet_name_list.forEach(function(y) {
@@ -25,8 +25,8 @@ app.get("/", (req, res) => {
     let headers = {};
     let data = [];
     for (z in worksheet) {
-      if (z.includes("C")) continue;
-      if (z[0] === "!") continue;
+      if (z.includes('C')) continue;
+      if (z[0] === '!') continue;
       //parse out the column, row, and value
       let tt = 0;
       for (let i = 0; i < z.length; i++) {
@@ -54,16 +54,16 @@ app.get("/", (req, res) => {
     res.send(data);
   });
 });
-app.get("/getdata", (req, res) => {
-  let XLSX = require("xlsx");
-  let workbook = XLSX.readFile("sample_table_20180610_wee.xlsx");
+app.get('/getdata', (req, res) => {
+  let XLSX = require('xlsx');
+  let workbook = XLSX.readFile('sample_table_201806202.xlsx');
   let sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function(y) {
     let worksheet = workbook.Sheets[y];
     let headers = {};
     let data = [];
     for (z in worksheet) {
-      if (z[0] === "!") continue;
+      if (z[0] === '!') continue;
       //parse out the column, row, and value
       let tt = 0;
       for (let i = 0; i < z.length; i++) {
@@ -88,20 +88,20 @@ app.get("/getdata", (req, res) => {
     //drop those first two rows which are empty
     data.shift();
     data.shift();
-    res.send(data);
+    res.end(res.json(data));
   });
 });
-app.get("/getdata2", (req, res) => {
-  let XLSX = require("xlsx");
-  let workbook = XLSX.readFile("sample_table_20180610_wee.xlsx");
+app.get('/getdata2', (req, res) => {
+  let XLSX = require('xlsx');
+  let workbook = XLSX.readFile('sample_table_20180610_wee.xlsx');
   let sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(function(y) {
     let worksheet = workbook.Sheets[y];
     let headers = {};
-    headers["A"] = "OccupationData";
+    headers['A'] = 'OccupationData';
     let data = {};
     for (z in worksheet) {
-      if (z[0] === "!") continue;
+      if (z[0] === '!') continue;
       //parse out the column, row, and value
 
       let tt = 0;
@@ -129,8 +129,8 @@ app.get("/getdata2", (req, res) => {
   });
 });
 
-app.post("/log", (req, res) => {
-  console.log(req.body, "-------------");
+app.post('/log', (req, res) => {
+  console.log(req.body, '-------------');
 
   // fs.appendFile('log.txt', 'new data', function (err) {
   //   if (err) {
@@ -139,7 +139,7 @@ app.post("/log", (req, res) => {
   //     // done
   //   }
   // })
-  res.send("pass");
+  res.send('pass');
 });
 
-app.listen(3000, () => console.log("Example app listening on port 3000!"));
+app.listen(3000, () => console.log('Example app listening on port 3000!'));
