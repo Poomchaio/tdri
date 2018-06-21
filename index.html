@@ -21,6 +21,8 @@
 
 
     <!-- Data -->
+    <script src="language.js"></script>
+
     <script src="styles.css"></script>
     <script src="ReadCSV.js"></script>
     <script src="Time.js"></script>
@@ -42,9 +44,9 @@
 
     <div class="container">
 
-        <div class="display-4 m-4" id="title">
-            <Text style="font-weight: 200;color: #7BB6DB;padding: 8px;border-radius: 10px">
-                Job Visualization
+        <div class="display-4 m-4">
+            <Text style="font-weight: 200;color: #7BB6DB;padding: 8px;border-radius: 10px" id="title">
+                Job
             </Text>
 
             <img width="300" height="60" src="https://tdri.or.th/wp-content/uploads/2017/03/cropped-logo.png" class="custom-logo" alt="TDRI: Thailand Development Research Institute"
@@ -62,7 +64,7 @@
             <div class="col-md-12">
                 <div id="div-date" class="row my-3 col-md-12">
                     <div class="col-md-2">
-                        <Text style="color: #7BB6DB;"> Start Date</Text>
+                        <Text style="color: #7BB6DB;" id='startDateLabel'> Start Date</Text>
                     </div>
                     <div class="col-md-4">
                         <input id="startDate" type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2017-02">
@@ -71,7 +73,7 @@
                 </div>
                 <div id="div-date" class="row my-2 col-md-12">
                     <div class="col-md-2">
-                        <Text style="color: #7BB6DB;"> End Date</Text>
+                        <Text style="color: #7BB6DB;" id='endDateLabel'> End Date</Text>
                     </div>
                     <div class="col-md-4">
                         <input id="endDate" type="text" data-format="YYYY-MM" data-template="MM YYYY" name="date" value="2017-05">
@@ -79,24 +81,27 @@
                     </div>
                 </div>
 
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <button type="button mt-2" class="btn btn-primary box-shadow m-4" id="applyBtn" style="background-color: #7BB6DB;border-color: #7BB6DB;">
+                            <Text id='apply'>Apply</Text>
+                        </button>
+                        <button type="button mt-2" class="btn btn-primary box-shadow" id="exportBtn" style="background-color: #7BB6DB;border-color: #7BB6DB;">Export</button>
+                    </div>
+                    <div class="col-4">
+                        <img id='th' class="imgBtn" src="Resources/images/th.png" style='height:60px;weight:40px' />
+                        <img id='en' class="imgBtn" src="Resources/images/en.png" style='height:60px;weight:40px' />
+                    </div>
+                </div>
 
 
-                <button type="button mt-2" class="btn btn-primary box-shadow m-4" id="applyBtn" style="background-color: #7BB6DB;border-color: #7BB6DB;">Apply</button>
-                <a href="">
-                    <button type="button mt-2" class="btn btn-primary box-shadow" id="exportBtn" style="background-color: #7BB6DB;border-color: #7BB6DB;">Export</button>
-                </a>
+
+
 
 
             </div>
 
-            <!-- <div class="col col-lg-2">
-                <a class="langBtn m-2" id="th">
-                                        <img class="imgBtn"src="Resources/images/th.png" />
-                                       </a>
-                <a class="langBtn" id="en">
-                                        <img class="imgBtn" src="Resources/images/en.png" />
-                                       </a>
-            </div> -->
+
         </div>
     </div>
 
